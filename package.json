@@ -6,7 +6,7 @@
   "main": "./lib/ml-kit.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomshen/ml-kit.js.git"
+    "url": "https://github.com/tomshen/ml-kit.git"
   },
   "license": "MIT",
   "engines": {
