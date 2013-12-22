@@ -28,10 +28,13 @@ function process_data(name) {
             output[_class][doc] = {};
           output[_class][doc][word] = count;
         });
-        output = _.mapValues(output, function (docs) {
-          return _.values(docs);
+        var instances = [];
+        _.forEach(output, function (featureVectors, _class) {
+          _.forEach(featureVectors, function (featureVector) {
+            instances.push(new ml.process.Instance(featureVector, _class));
+          });
         });
-        resolve(output);
+        resolve(instances);
       });
     });
   });
@@ -44,18 +47,13 @@ function testNaiveBayes(trainingData, testingData) {
   nb.train(trainingData);
   console.log('Training took ' + String((_.now() - startTrain) / 1000) + ' seconds.');
   var startTest = _.now();
-  var totalErrorRate = 0;
-  _.forEach(testingData, function (data, _class) {
-    nb.classifyInstances(data, function (classifications) {
-      var errorRate = _.filter(classifications, function (c) {
-        return c != _class;
-      }).length / classifications.length;
-      totalErrorRate += errorRate;
-      console.log('Class ' + _class + ' had an error rate of ' + errorRate);
-      console.log('Testing ' + _class + ' took ' + String((_.now() - startTest) / 1000) + ' seconds.');
-    });
+  nb.classifyInstances(testingData, function (classifications) {
+    var errorRate = _.filter(classifications, function (c, i) {
+      return c != testingData[i].getClass();
+    }).length / classifications.length;
+    console.log('Error rate: ' + String(errorRate));
+    console.log('Testing took ' + String((_.now() - startTest) / 1000) + ' seconds.');
   });
-  console.log('Mean error rate: ' + totalErrorRate / 20);
 }
 
 RSVP.all([process_data('train'), process_data('test')]).then(function (data) {

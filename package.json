@@ -1,6 +1,6 @@
 {
   "name": "ml-kit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Tom Shen <tom@shen.io>",
   "description": "a machine learning toolkit",
   "main": "./lib/ml-kit.js",
