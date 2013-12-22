@@ -53,7 +53,7 @@ function testVotedPerceptron(trainingData, testingData, features) {
   var startTest = _.now();
   vp.classifyInstances(testingData, function (classifications) {
     var errorRate = _.filter(classifications, function (c, i) {
-      return c != trainingData[i].getClass();
+      return c != testingData[i].getClass();
     }).length / classifications.length;
     console.log('Error rate: ' + String(errorRate));
     console.log('Testing took ' + String((_.now() - startTest) / 1000) + ' seconds.');
